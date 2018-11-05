@@ -1,32 +1,23 @@
 ﻿using ObserverPatternDemo.Implemantation.Observable;
 using ObserverPatternDemo.Implemantation.Observers;
 using System;
+using System.Threading;
 
 namespace WeatherStation
 {
     public class Program
     {
-        static void Main(string[] args)
+        private static WeatherData weather;
+        private static StatisticReport statistic;
+        private static CurrentConditionsReport current;
+
+        // Gets reports from subscribers.
+        private static void GetReports()
         {
-            var weather = new WeatherData();
-            var statistic = new StatisticReport();
-            var current = new CurrentConditionsReport();
+            int count = 0;
 
-            weather.Register(statistic);
-            weather.Register(current);
-
-            WeatherInfo[] array =
+            while(count < 5)
             {
-                new WeatherInfo(32, 1002, 65),
-                new WeatherInfo(30, 1001, 60),
-                new WeatherInfo(28, 1000, 55)
-            };
-
-            // Updating WeatherData and getting reports from subscribers.
-            foreach (var item in array)
-            {
-                weather.CurrentData = item;
-
                 Console.WriteLine(current.GetReport());
                 string[] stat = statistic.GetStatisticReport();
 
@@ -38,13 +29,27 @@ namespace WeatherStation
                 }
 
                 Console.WriteLine();
+
+                Thread.Sleep(3500);
+                count++;
             }
 
-            // Data doesn't refresh after unsubscribing.
-            weather.Unregister(current);
-            weather.CurrentData = new WeatherInfo(10, 1000, 100);
+            weather.GeneratorWork = false;
+        }
 
-            Console.WriteLine(current.GetReport());
+        private static void Main(string[] args)
+        {
+            weather = new WeatherData();
+            statistic = new StatisticReport();
+            current = new CurrentConditionsReport();
+
+            weather.Register(statistic);
+            weather.Register(current);
+
+            Thread getThread = new Thread(GetReports); 
+
+            getThread.Start(); 
+            weather.StartGenerator();
         }
     }
 }

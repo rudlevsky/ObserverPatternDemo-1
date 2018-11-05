@@ -10,14 +10,16 @@ namespace ObserverPatternDemo.Implemantation.Observers
     public class CurrentConditionsReport : IObserver<WeatherInfo>, IFormattable
     {
         private WeatherInfo currentInfo;
+        private string senderName;
 
         /// <summary>
         /// Updates current report.
         /// </summary>
         /// <param name="data">New data for report.</param>
-        public void Update(WeatherInfo data)
+        public void Update(object obj, WeatherInfo data)
         {
             currentInfo = data;
+            senderName = obj.ToString();
         }
 
         /// <summary>
@@ -66,19 +68,19 @@ namespace ObserverPatternDemo.Implemantation.Observers
             {
                 case "G":
                 case "THP":
-                    return $"Temperature: {currentInfo.Temperature}, Humidity: {currentInfo.Humidity}, Pressure: {currentInfo.Pressure}";
+                    return $"Sender: {senderName}, Temperature: {currentInfo.Temperature}, Humidity: {currentInfo.Humidity}, Pressure: {currentInfo.Pressure}";
                 case "T":
-                    return $"Temperature: {currentInfo.Temperature}";
+                    return $"Sender: {senderName}, Temperature: {currentInfo.Temperature}";
                 case "H":
-                    return $"Humidity: {currentInfo.Humidity}";
+                    return $"Sender: {senderName}, Humidity: {currentInfo.Humidity}";
                 case "P":
-                    return $"Pressure: {currentInfo.Pressure}";
+                    return $"Sender: {senderName}, Pressure: {currentInfo.Pressure}";
                 case "TH":
-                    return $"Temperature: {currentInfo.Temperature}, Humidity: {currentInfo.Humidity}";
+                    return $"Sender: {senderName}, Temperature: {currentInfo.Temperature}, Humidity: {currentInfo.Humidity}";
                 case "HP":
-                    return $"Humidity: {currentInfo.Humidity}, Pressure: {currentInfo.Pressure}";
+                    return $"Sender: {senderName}, Humidity: {currentInfo.Humidity}, Pressure: {currentInfo.Pressure}";
                 case "TP":
-                    return $"Temperature: {currentInfo.Temperature}, Pressure: {currentInfo.Pressure}";
+                    return $"Sender: {senderName}, Temperature: {currentInfo.Temperature}, Pressure: {currentInfo.Pressure}";
                 default:
                     throw new FormatException(string.Format("The {0} format string is not supported.", format));
             }

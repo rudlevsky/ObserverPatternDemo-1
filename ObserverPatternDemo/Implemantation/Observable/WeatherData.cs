@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace ObserverPatternDemo.Implemantation.Observable
 {
@@ -10,6 +11,7 @@ namespace ObserverPatternDemo.Implemantation.Observable
     {
         private List<IObserver<WeatherInfo>> observers;
         private WeatherInfo currentData;
+        public bool GeneratorWork { get; set; } = true;
 
         /// <summary>
         /// Initializes a list of all observers.
@@ -19,35 +21,28 @@ namespace ObserverPatternDemo.Implemantation.Observable
             observers = new List<IObserver<WeatherInfo>>();
         }
 
-        /// <summary>
-        /// Returns and sets current data.
-        /// </summary>
-        public WeatherInfo CurrentData
+        public void StartGenerator()
         {
-            get
+            while(GeneratorWork)
             {
-                if (currentData == null)
-                {
-                    throw new ArgumentNullException($"{nameof(currentData)} was null.");
-                }
+                Random rand = new Random();
+                var currentData = new WeatherInfo { Temperature = rand.Next(40), Humidity = rand.Next(400, 500), Pressure = rand.Next(990, 1010) };
 
-                return currentData.Clone();
-            }
-            set
-            {
-                currentData = value;
-                Notify();
+                IObservable<WeatherInfo> obj = this;
+                obj.Notify(this, currentData);
+
+                Thread.Sleep(3000);
             }
         }
 
         /// <summary>
         /// Notifies all observers.
         /// </summary>
-        public void Notify()
+        void IObservable<WeatherInfo>.Notify(object sender, WeatherInfo info)
         {
             foreach (IObserver<WeatherInfo> observer in observers)
             {
-                observer.Update(CurrentData);
+                observer.Update(this, info);
             }
         }
 

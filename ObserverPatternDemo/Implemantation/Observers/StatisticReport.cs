@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ObserverPatternDemo.Implemantation.Observable;
 
 namespace ObserverPatternDemo.Implemantation.Observers
@@ -10,6 +9,7 @@ namespace ObserverPatternDemo.Implemantation.Observers
     public class StatisticReport : IObserver<WeatherInfo>
     {
         private List<WeatherInfo> listInfo;
+        private string senderName;
 
         /// <summary>
         /// Constructor creates a list of all reports.
@@ -23,9 +23,10 @@ namespace ObserverPatternDemo.Implemantation.Observers
         /// Adds new report in the list of all reports.
         /// </summary>
         /// <param name="data"></param>
-        public void Update(WeatherInfo data)
+        public void Update(object obj, WeatherInfo data)
         {
             listInfo.Add(data);
+            senderName = obj.ToString();
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace ObserverPatternDemo.Implemantation.Observers
 
             for (int i = 0; i < listInfo.Count; i++)
             {
-                report[i] = $"Temperature: {listInfo[i].Temperature}, Humidity: {listInfo[i].Humidity}, Pressure: {listInfo[i].Pressure}";
+                report[i] = $"Sender: {senderName}, Temperature: {listInfo[i].Temperature}, Humidity: {listInfo[i].Humidity}, Pressure: {listInfo[i].Pressure}";
             }
 
             return report;
