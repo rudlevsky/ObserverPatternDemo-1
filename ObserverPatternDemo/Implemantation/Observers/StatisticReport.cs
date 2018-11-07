@@ -21,24 +21,6 @@ namespace ObserverPatternDemo.Implemantation.Observers
         }
 
         /// <summary>
-        /// Registers a subscriber.
-        /// </summary>
-        /// <param name="weather">Object for registration.</param>
-        public void Register(WeatherData weather)
-        {
-            weather.NewMail += Update;
-        }
-
-        /// <summary>
-        /// Unregisters a subscriber.
-        /// </summary>
-        /// <param name="weather">Object for unregistration.</param>
-        public void UnRegister(WeatherData weather)
-        {
-            weather.NewMail -= Update;
-        }
-
-        /// <summary>
         /// Adds new report in the list of all reports.
         /// </summary>
         /// <param name="data"></param>

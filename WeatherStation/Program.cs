@@ -43,8 +43,8 @@ namespace WeatherStation
             statistic = new StatisticReport();
             current = new CurrentConditionsReport();
 
-            statistic.Register(weather);
-            current.Register(weather);
+            weather.Register(statistic);
+            weather.Register(current);
             GetReports();
         }
     }
