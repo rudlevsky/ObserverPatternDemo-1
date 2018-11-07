@@ -9,7 +9,7 @@ namespace ObserverPatternDemo.Implemantation.Observers
     public class StatisticReport : IObserver<WeatherInfo>
     {
         private List<WeatherInfo> listInfo;
-        private string senderName;
+        private List<string> senderName;
 
         /// <summary>
         /// Constructor creates a list of all reports.
@@ -17,6 +17,25 @@ namespace ObserverPatternDemo.Implemantation.Observers
         public StatisticReport()
         {
             listInfo = new List<WeatherInfo>();
+            senderName = new List<string>();
+        }
+
+        /// <summary>
+        /// Registers a subscriber.
+        /// </summary>
+        /// <param name="weather">Object for registration.</param>
+        public void Register(WeatherData weather)
+        {
+            weather.NewMail += Update;
+        }
+
+        /// <summary>
+        /// Unregisters a subscriber.
+        /// </summary>
+        /// <param name="weather">Object for unregistration.</param>
+        public void UnRegister(WeatherData weather)
+        {
+            weather.NewMail -= Update;
         }
 
         /// <summary>
@@ -26,7 +45,7 @@ namespace ObserverPatternDemo.Implemantation.Observers
         public void Update(object obj, WeatherInfo data)
         {
             listInfo.Add(data);
-            senderName = obj.ToString();
+            senderName.Add(obj.ToString());
         }
 
         /// <summary>
@@ -39,7 +58,7 @@ namespace ObserverPatternDemo.Implemantation.Observers
 
             for (int i = 0; i < listInfo.Count; i++)
             {
-                report[i] = $"Sender: {senderName}, Temperature: {listInfo[i].Temperature}, Humidity: {listInfo[i].Humidity}, Pressure: {listInfo[i].Pressure}";
+                report[i] = $"Sender: {senderName[i]}, Temperature: {listInfo[i].Temperature}, Humidity: {listInfo[i].Humidity}, Pressure: {listInfo[i].Pressure}";
             }
 
             return report;

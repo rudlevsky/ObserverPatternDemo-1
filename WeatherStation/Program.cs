@@ -18,6 +18,8 @@ namespace WeatherStation
 
             while(count < 5)
             {
+                weather.OnGenerate();
+
                 Console.WriteLine(current.GetReport());
                 string[] stat = statistic.GetStatisticReport();
 
@@ -30,11 +32,9 @@ namespace WeatherStation
 
                 Console.WriteLine();
 
-                Thread.Sleep(3500);
+                Thread.Sleep(3000);
                 count++;
             }
-
-            weather.GeneratorWork = false;
         }
 
         private static void Main(string[] args)
@@ -43,13 +43,9 @@ namespace WeatherStation
             statistic = new StatisticReport();
             current = new CurrentConditionsReport();
 
-            weather.Register(statistic);
-            weather.Register(current);
-
-            Thread getThread = new Thread(GetReports); 
-
-            getThread.Start(); 
-            weather.StartGenerator();
+            statistic.Register(weather);
+            current.Register(weather);
+            GetReports();
         }
     }
 }

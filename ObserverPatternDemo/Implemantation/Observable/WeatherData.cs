@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
 
 namespace ObserverPatternDemo.Implemantation.Observable
 {
@@ -9,59 +7,29 @@ namespace ObserverPatternDemo.Implemantation.Observable
     /// </summary>
     public class WeatherData : IObservable<WeatherInfo>
     {
-        private List<IObserver<WeatherInfo>> observers;
-        private WeatherInfo currentData;
-        public bool GeneratorWork { get; set; } = true;
+        /// <summary>
+        /// Contains subscribers methods.
+        /// </summary>
+        public event Action<object, WeatherInfo> NewMail;
 
         /// <summary>
-        /// Initializes a list of all observers.
+        /// Generates data and sends it to subscribers.
         /// </summary>
-        public WeatherData()
+        public void OnGenerate()
         {
-            observers = new List<IObserver<WeatherInfo>>();
-        }
+            Random rand = new Random();
+            var currentData = new WeatherInfo { Temperature = rand.Next(40), Humidity = rand.Next(400, 500), Pressure = rand.Next(990, 1010) };
 
-        public void StartGenerator()
-        {
-            while(GeneratorWork)
-            {
-                Random rand = new Random();
-                var currentData = new WeatherInfo { Temperature = rand.Next(40), Humidity = rand.Next(400, 500), Pressure = rand.Next(990, 1010) };
-
-                IObservable<WeatherInfo> obj = this;
-                obj.Notify(this, currentData);
-
-                Thread.Sleep(3000);
-            }
+            IObservable<WeatherInfo> obj = this;
+            obj.Notify(currentData);
         }
 
         /// <summary>
         /// Notifies all observers.
         /// </summary>
-        void IObservable<WeatherInfo>.Notify(object sender, WeatherInfo info)
+        void IObservable<WeatherInfo>.Notify(WeatherInfo info)
         {
-            foreach (IObserver<WeatherInfo> observer in observers)
-            {
-                observer.Update(this, info);
-            }
-        }
-
-        /// <summary>
-        /// Registers an observer.
-        /// </summary>
-        /// <param name="observer">Observer for registration.</param>
-        public void Register(IObserver<WeatherInfo> observer)
-        {
-            observers.Add(observer);
-        }
-
-        /// <summary>
-        /// Unregisters an observer.
-        /// </summary>
-        /// <param name="observer">Observer for unregistration.</param>
-        public void Unregister(IObserver<WeatherInfo> observer)
-        {
-            observers.Remove(observer);
+            NewMail?.Invoke(this, info);
         }
     }
 }
