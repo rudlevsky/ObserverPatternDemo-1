@@ -19,9 +19,7 @@ namespace ObserverPatternDemo.Implemantation.Observable
         {
             Random rand = new Random();
             var currentData = new WeatherInfo { Temperature = rand.Next(40), Humidity = rand.Next(400, 500), Pressure = rand.Next(990, 1010) };
-
-            IObservable<WeatherInfo> obj = this;
-            obj.Notify(currentData);
+            Notify(currentData);
         }
 
         /// <summary>
