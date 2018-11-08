@@ -9,7 +9,7 @@ namespace ObserverPatternDemo.Implemantation.Observers
     public class StatisticReport : IObserver<WeatherInfo>
     {
         private List<WeatherInfo> listInfo;
-        private List<string> senderName;
+        private List<string> senderNames;
 
         /// <summary>
         /// Constructor creates a list of all reports.
@@ -17,7 +17,7 @@ namespace ObserverPatternDemo.Implemantation.Observers
         public StatisticReport()
         {
             listInfo = new List<WeatherInfo>();
-            senderName = new List<string>();
+            senderNames = new List<string>();
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace ObserverPatternDemo.Implemantation.Observers
         public void Update(object obj, WeatherInfo data)
         {
             listInfo.Add(data);
-            senderName.Add(obj.ToString());
+            senderNames.Add(obj.ToString());
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace ObserverPatternDemo.Implemantation.Observers
 
             for (int i = 0; i < listInfo.Count; i++)
             {
-                report[i] = $"Sender: {senderName[i]}, Temperature: {listInfo[i].Temperature}, Humidity: {listInfo[i].Humidity}, Pressure: {listInfo[i].Pressure}";
+                report[i] = $"Sender: {senderNames[i]}, Temperature: {listInfo[i].Temperature}, Humidity: {listInfo[i].Humidity}, Pressure: {listInfo[i].Pressure}";
             }
 
             return report;
